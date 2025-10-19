@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Motors - Vehicle Catalog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff5c33;
+            --primary-hover: #ff784f;
+            --primary-dark: #cc4a29;
+            --bg-dark: #0d1117;
+            --bg-light: #f8f9fa;
+            --bg-card: #161b22;
+            --bg-card-light: #ffffff;
+            --bg-card-light-secondary: #f8f9fa;
+            --text-light: #e6e6e6;
+            --text-dark: #2d3748;
+            --text-muted: #8b949e;
+            --text-muted-light: #718096;
+            --border: #30363d;
+            --border-light: #e2e8f0;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --info: #3498db;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--bg-card-light);
+            --bg-tertiary: var(--bg-card-light-secondary);
+            --text-primary: var(--text-dark);
+            --text-secondary: var(--text-muted-light);
+            --border-primary: var(--border-light);
+            --shadow-primary: var(--shadow-light);
+            --floating-btn-bg: rgba(255, 255, 255, 0.9);
+            --floating-btn-color: #666;
+            --card-bg: var(--bg-card-light);
+            --category-bg: var(--bg-card-light-secondary);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: var(--bg-card);
+            --bg-tertiary: #1c2128;
+            --text-primary: var(--text-light);
+            --text-secondary: var(--text-muted);
+            --border-primary: var(--border);
+            --shadow-primary: var(--shadow);
+            --floating-btn-bg: rgba(30, 30, 30, 0.9);
+            --floating-btn-color: var(--text-light);
+            --card-bg: #1c2128;
+            --category-bg: #1c2128;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .logo {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), #ff8c66);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+
+        .theme-btn {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .theme-btn:hover {
+            transform: rotate(30deg);
+            border-color: var(--primary);
+        }
+
+        /* Auth Overlay */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        [data-theme="light"] #overlay {
+            background: rgba(248, 249, 250, 0.95);
+        }
+
+        .auth-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-primary);
+            text-align: center;
+        }
+
+        .auth-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .input-with-icon input {
+            padding-left: 45px;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 15px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-primary);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 92, 51, 0.2);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 15px;
+        }
+
+        .auth-btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .guest-btn {
+            background: transparent;
+            border: 2px solid var(--border-primary);
+            color: var(--text-primary);
+        }
+
+        .guest-btn:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--primary);
+        }
+
+        /* Form Container */
+        .form-container {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-primary);
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .form-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-right: 15px;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 15px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-primary);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 92, 51, 0.2);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 15px;
+            background: var(--primary);
+            border: none;
+            border-radius: var(--radius);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 15px;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-primary);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+        }
+
+        /* Catalogue */
+        .catalogue {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-primary);
+        }
+
+        .catalogue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .catalogue-title {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-primary);
+            border-radius: var(--radius);
+            color: var(--text-primary);
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 92, 51, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .category-btn {
+            background: var(--category-bg);
+            color: var(--text-primary);
+            border: 2px solid var(--border-primary);
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .category-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .category-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .vehicles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .vehicle-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            border: 1px solid var(--border-primary);
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .vehicle-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
+
+        .vehicle-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        .vehicle-image::before {
+            content: "No Image";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .vehicle-content {
+            padding: 25px;
+            position: relative;
+        }
+
+        .vehicle-category {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .vehicle-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+        }
+
+        .vehicle-description {
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .vehicle-price {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .vehicle-qty {
+            font-size: 0.9rem;
+            color: var(--warning);
+            margin-bottom: 20px;
+        }
+
+        .vehicle-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .edit-btn {
+            background: var(--info);
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #2980b9;
+        }
+
+        .delete-btn {
+            background: var(--danger);
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Messages */
+        .message {
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .message i {
+            font-size: 1.2rem;
+        }
+
+        .message-error {
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .message-success {
+            background: rgba(39, 174, 96, 0.1);
+            border: 1px solid var(--success);
+            color: var(--success);
+        }
+
+        .message-warning {
+            background: rgba(243, 156, 18, 0.1);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px 0;
+            border-top: 1px solid var(--border-primary);
+            color: var(--text-secondary);
+        }
+
+        .credits {
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .credits a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .credits a:hover {
+            text-decoration: underline;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Export Button */
+        .export-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            background: #219653;
+        }
+
+        /* Favorites */
+        .favorite-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--floating-btn-bg);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--floating-btn-color);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .favorite-btn.active {
+            color: var(--danger);
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.1);
+            background: var(--floating-btn-bg);
+        }
+
+        /* Quick View */
+        .quick-view-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--floating-btn-bg);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--floating-btn-color);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            z-index: 2;
+        }
+
+        .quick-view-btn:hover {
+            color: var(--primary);
+            transform: scale(1.1);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--bg-secondary);
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .vehicles-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .catalogue-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .search-container {
+                max-width: 100%;
+            }
+
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+            }
+
+            .theme-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn" id="themeToggle">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Overlay de connexion -->
+    <div id="overlay">
+        <div class="auth-card">
+            <div class="auth-icon">
+                <i class="fas fa-car"></i>
+            </div>
+            <h2 class="auth-title">Rider Motors</h2>
+            <p class="auth-subtitle">Premium Vehicle Catalog Access</p>
+            
+            <div class="input-group">
+                <div class="input-with-icon">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" class="auth-input" placeholder="Enter admin password">
+                </div>
+            </div>
+            
+            <button id="login-btn" class="auth-btn">
+                <i class="fas fa-sign-in-alt"></i> Login as Admin
+            </button>
+            
+            <button id="guest-btn" class="auth-btn guest-btn">
+                <i class="fas fa-user"></i> Continue as Guest
+            </button>
+            
+            <div id="message-container" style="margin-top: 20px;"></div>
+        </div>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quickViewModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div id="modalContent">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-car-side"></i>
+            </div>
+            <h1>Rider Motors</h1>
+            <p class="subtitle">Exclusive Premium Vehicle Collection</p>
+            
+            <!-- Statistics -->
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalVehicles">0</span>
+                    <span class="stat-label">Total Vehicles</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalValue">$0</span>
+                    <span class="stat-label">Total Value</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="categoriesCount">0</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="favoritesCount">0</span>
+                    <span class="stat-label">Favorites</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Vehicle Form (visible only for admin) -->
+        <div id="formContainer" class="form-container hidden">
+            <div class="form-header">
+                <div class="form-icon">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3 class="form-title" id="formTitle">Add Vehicle</h3>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Vehicle Name</label>
+                    <input type="text" id="titre" class="form-input" placeholder="Ex: Porsche 911 Turbo">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Price ($)</label>
+                    <input type="number" id="prix" class="form-input" placeholder="Ex: 120000">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea id="description" class="form-textarea" placeholder="Describe the vehicle..."></textarea>
+            </div>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Image</label>
+                    <input type="file" id="imageInput" class="form-input" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select id="categorie" class="form-select">
+                        <option value="">-- Select a category --</option>
+                        <option>UTILITY</option>
+                        <option>HUMVEE</option>
+                        <option>HYPER</option>
+                        <option>SPORT</option>
+                        <option>OFFROAD TRUCK</option>
+                        <option>SUV</option>
+                        <option>MUSCLE</option>
+                        <option>LOWRIDER</option>
+                        <option>ROADSTER</option>
+                        <option>LUXURY</option>
+                        <option>COUPE</option>
+                        <option>FASTBACK</option>
+                        <option>CONVERTIBLE</option>
+                        <option>SEDAN</option>
+                        <option>HATCH</option>
+                        <option>CADDY</option>
+                        <option>WAGON</option>
+                        <option>VAN</option>
+                        <option>RV</option>
+                        <option>TRAILER</option>
+                        <option>EVENT</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group hidden" id="eventQtyContainer">
+                <label class="form-label">Limited Quantity (EVENT)</label>
+                <input type="number" id="eventQty" class="form-input" placeholder="Ex: 5">
+            </div>
+            
+            <div class="form-actions">
+                <button id="saveButton" class="btn-primary">
+                    <i class="fas fa-save"></i> Save Vehicle
+                </button>
+                <button id="cancelButton" class="btn-secondary hidden">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+
+        <!-- Catalog -->
+        <div class="catalogue">
+            <div class="catalogue-header">
+                <h3 class="catalogue-title">Our Collection</h3>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchBar" class="search-input" placeholder="Search for a vehicle...">
+                    </div>
+                    <button class="export-btn" id="exportBtn">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            
+            <div class="categories" id="categoriesContainer">
+                <!-- Categories will be generated here -->
+            </div>
+            
+            <div class="vehicles-grid" id="liste">
+                <!-- Vehicles will be displayed here -->
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>&copy; 2024 Rider Motors. All rights reserved.</p>
+            <p class="credits">Created by <a href="https://github.com/RiderTheKTV" target="_blank">RiderTheKTV</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Data and state management
+        let vehicules = JSON.parse(localStorage.getItem('vehicules')) || [];
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let mode = 'guest';
+        let activeCategory = 'All';
+        let editingId = null;
+        const categories = [
+            "UTILITY", "HUMVEE", "HYPER", "SPORT", "OFFROAD TRUCK", 
+            "SUV", "MUSCLE", "LOWRIDER", "ROADSTER", "LUXURY", 
+            "COUPE", "FASTBACK", "CONVERTIBLE", "SEDAN", "HATCH", 
+            "CADDY", "WAGON", "VAN", "RV", "TRAILER", "EVENT"
+        ];
+
+        // DOM Elements
+        const overlay = document.getElementById('overlay');
+        const formContainer = document.getElementById('formContainer');
+        const formTitle = document.getElementById('formTitle');
+        const titreInput = document.getElementById('titre');
+        const descInput = document.getElementById('description');
+        const prixInput = document.getElementById('prix');
+        const catSelect = document.getElementById('categorie');
+        const eventQtyContainer = document.getElementById('eventQtyContainer');
+        const eventQty = document.getElementById('eventQty');
+        const imageInput = document.getElementById('imageInput');
+        const saveButton = document.getElementById('saveButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const listeDiv = document.getElementById('liste');
+        const searchBar = document.getElementById('searchBar');
+        const categoriesContainer = document.getElementById('categoriesContainer');
+        const messageContainer = document.getElementById('message-container');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('login-btn');
+        const guestBtn = document.getElementById('guest-btn');
+        const themeToggle = document.getElementById('themeToggle');
+        const exportBtn = document.getElementById('exportBtn');
+        const totalVehiclesEl = document.getElementById('totalVehicles');
+        const totalValueEl = document.getElementById('totalValue');
+        const categoriesCountEl = document.getElementById('categoriesCount');
+        const favoritesCountEl = document.getElementById('favoritesCount');
+        const quickViewModal = document.getElementById('quickViewModal');
+        const modalClose = document.getElementById('modalClose');
+        const modalContent = document.getElementById('modalContent');
+
+        // Initialize theme from localStorage or default to dark
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        document.body.setAttribute('data-theme', currentTheme);
+        updateThemeIcon();
+
+        // Event Listeners
+        catSelect.addEventListener('change', function() {
+            eventQtyContainer.classList.toggle('hidden', this.value !== 'EVENT');
+        });
+
+        searchBar.addEventListener('input', afficherCatalogue);
+
+        loginBtn.addEventListener('click', verifyPassword);
+        guestBtn.addEventListener('click', continueAsGuest);
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verifyPassword();
+        });
+
+        themeToggle.addEventListener('click', toggleTheme);
+        exportBtn.addEventListener('click', exportCatalog);
+        modalClose.addEventListener('click', () => {
+            quickViewModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === quickViewModal) {
+                quickViewModal.style.display = 'none';
+            }
+        });
+
+        // Functions
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const icon = themeToggle.querySelector('i');
+            
+            if (currentTheme === 'dark') {
+                icon.className = 'fas fa-moon';
+            } else {
+                icon.className = 'fas fa-sun';
+            }
+        }
+
+        function updateStats() {
+            totalVehiclesEl.textContent = vehicules.length;
+            
+            const totalValue = vehicules.reduce((sum, vehicle) => sum + (vehicle.prix || 0), 0);
+            totalValueEl.textContent = `$${totalValue.toLocaleString()}`;
+            
+            const uniqueCategories = new Set(vehicules.map(v => v.cat));
+            categoriesCountEl.textContent = uniqueCategories.size;
+            
+            favoritesCountEl.textContent = favorites.length;
+        }
+
+        function showMessage(message, type) {
+            const icon = type === 'error' ? 'exclamation-triangle' : 
+                         type === 'success' ? 'check-circle' : 'info-circle';
+            
+            messageContainer.innerHTML = `
+                <div class="message message-${type}">
+                    <i class="fas fa-${icon}"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            setTimeout(() => {
+                messageContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        function continueAsGuest() {
+            mode = 'guest';
+            overlay.classList.add('hidden');
+            renderCategories();
+            afficherCatalogue();
+            updateStats();
+            showMessage('Welcome to Rider Motors!', 'success');
+        }
+
+        function verifyPassword() {
+            const pw = passwordInput.value;
+            
+            if (pw === 'Sa2008$am$') {
+                mode = 'owner';
+                overlay.classList.add('hidden');
+                formContainer.classList.remove('hidden');
+                renderCategories();
+                afficherCatalogue();
+                updateStats();
+                showMessage('Admin login successful! Welcome to Rider Motors.', 'success');
+            } else {
+                showMessage('Incorrect password. Please try again.', 'error');
+                passwordInput.focus();
+            }
+        }
+
+        function ajouterVehicule() {
+            if (mode !== 'owner') return;
+            
+            const titre = titreInput.value.trim();
+            if (!titre) {
+                showMessage('Please provide a vehicle title.', 'error');
+                titreInput.focus();
+                return;
+            }
+            
+            const desc = descInput.value.trim();
+            const prix = Number(prixInput.value) || 0;
+            const cat = catSelect.value;
+            
+            if (!cat) {
+                showMessage('Please select a category.', 'error');
+                catSelect.focus();
+                return;
+            }
+            
+            const qty = (cat === 'EVENT') ? Number(eventQty.value) || 0 : null;
+            
+            if (imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveVehicule(titre, desc, prix, cat, e.target.result, qty);
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                saveVehicule(titre, desc, prix, cat, '', qty);
+            }
+        }
+
+        function saveVehicule(titre, desc, prix, cat, img, qty) {
+            if (editingId) {
+                // Edit existing vehicle
+                const index = vehicules.findIndex(v => v.id === editingId);
+                if (index !== -1) {
+                    vehicules[index] = {
+                        id: editingId,
+                        titre,
+                        desc,
+                        prix,
+                        cat,
+                        img: img || vehicules[index].img,
+                        qty
+                    };
+                }
+                editingId = null;
+                saveButton.innerHTML = '<i class="fas fa-save"></i> Save Vehicle';
+                cancelButton.classList.add('hidden');
+                formTitle.textContent = 'Add Vehicle';
+                showMessage('Vehicle updated successfully!', 'success');
+            } else {
+                // Add new vehicle
+                vehicules.unshift({ 
+                    id: Date.now(), 
+                    titre, 
+                    desc, 
+                    prix, 
+                    cat, 
+                    img, 
+                    qty 
+                });
+                showMessage('Vehicle added successfully!', 'success');
+            }
+            
+            localStorage.setItem('vehicules', JSON.stringify(vehicules));
+            resetForm();
+            afficherCatalogue();
+            updateStats();
+        }
+
+        function resetForm() {
+            titreInput.value = '';
+            descInput.value = '';
+            prixInput.value = '';
+            catSelect.value = '';
+            eventQty.value = '';
+            eventQtyContainer.classList.add('hidden');
+            imageInput.value = '';
+        }
+
+        function editVehicule(id) {
+            const vehicule = vehicules.find(v => v.id === id);
+            if (!vehicule) return;
+            
+            titreInput.value = vehicule.titre;
+            descInput.value = vehicule.desc;
+            prixInput.value = vehicule.prix;
+            catSelect.value = vehicule.cat;
+            eventQty.value = vehicule.qty || '';
+            eventQtyContainer.classList.toggle('hidden', vehicule.cat !== 'EVENT');
+            
+            editingId = id;
+            saveButton.innerHTML = '<i class="fas fa-edit"></i> Update Vehicle';
+            cancelButton.classList.remove('hidden');
+            formTitle.textContent = 'Edit Vehicle';
+            
+            formContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            editingId = null;
+            saveButton.innerHTML = '<i class="fas fa-save"></i> Save Vehicle';
+            cancelButton.classList.add('hidden');
+            formTitle.textContent = 'Add Vehicle';
+            resetForm();
+        }
+
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
+            if (index === -1) {
+                favorites.push(id);
+                showMessage('Vehicle added to favorites!', 'success');
+            } else {
+                favorites.splice(index, 1);
+                showMessage('Vehicle removed from favorites!', 'success');
+            }
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            afficherCatalogue();
+            updateStats();
+        }
+
+        function showQuickView(id) {
+            const vehicule = vehicules.find(v => v.id === id);
+            if (!vehicule) return;
+            
+            const hasImage = vehicule.img && vehicule.img !== '';
+            
+            modalContent.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                    <div>
+                        ${hasImage ? 
+                            `<img src="${vehicule.img}" alt="${vehicule.titre}" style="width: 100%; border-radius: var(--radius);">` :
+                            `<div class="vehicle-image" style="width: 100%; height: 300px; border-radius: var(--radius);"></div>`
+                        }
+                    </div>
+                    <div>
+                        <h2 style="color: var(--primary); margin-bottom: 15px;">${vehicule.titre}</h2>
+                        <div style="background: var(--primary); color: white; display: inline-block; padding: 5px 15px; border-radius: 20px; margin-bottom: 15px;">
+                            ${vehicule.cat}
+                        </div>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px; line-height: 1.6;">${vehicule.desc}</p>
+                        <div style="font-size: 2rem; font-weight: 800; color: var(--primary); margin-bottom: 10px;">
+                            $${vehicule.prix.toLocaleString()}
+                        </div>
+                        ${vehicule.cat === 'EVENT' && vehicule.qty ? 
+                            `<div style="color: var(--warning); margin-bottom: 20px;">
+                                <i class="fas fa-exclamation-circle"></i> Limited quantity: ${vehicule.qty}
+                            </div>` : ''}
+                        <div style="margin-top: 30px;">
+                            <button class="btn-primary" onclick="editVehicule(${vehicule.id}); quickViewModal.style.display='none';" ${mode !== 'owner' ? 'disabled style="opacity: 0.5;"' : ''}>
+                                <i class="fas fa-edit"></i> Edit Vehicle
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            quickViewModal.style.display = 'flex';
+        }
+
+        function renderCategories() {
+            categoriesContainer.innerHTML = '';
+            
+            // All button
+            const allBtn = document.createElement('button');
+            allBtn.className = `category-btn ${activeCategory === 'All' ? 'active' : ''}`;
+            allBtn.innerHTML = '<i class="fas fa-layer-group"></i> All Vehicles';
+            allBtn.onclick = () => {
+                activeCategory = 'All';
+                renderCategories();
+                afficherCatalogue();
+            };
+            categoriesContainer.appendChild(allBtn);
+            
+            // Categories
+            categories.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = `category-btn ${c === activeCategory ? 'active' : ''}`;
+                btn.innerHTML = `<i class="fas fa-tag"></i> ${c}`;
+                btn.onclick = () => {
+                    activeCategory = c;
+                    renderCategories();
+                    afficherCatalogue();
+                };
+                categoriesContainer.appendChild(btn);
+            });
+        }
+
+        function afficherCatalogue() {
+            listeDiv.innerHTML = '';
+            
+            const q = searchBar.value.toLowerCase();
+            let list = vehicules.filter(v => 
+                v.titre.toLowerCase().includes(q) || 
+                v.desc.toLowerCase().includes(q) ||
+                v.cat.toLowerCase().includes(q)
+            );
+            
+            if (activeCategory !== 'All') {
+                list = list.filter(v => v.cat === activeCategory);
+            }
+            
+            if (list.length === 0) {
+                listeDiv.innerHTML = `
+                    <div style="grid-column:1/-1; text-align:center; padding:60px 20px; color:var(--text-secondary);">
+                        <i class="fas fa-search" style="font-size:3rem; margin-bottom:20px;"></i>
+                        <h3 style="margin-bottom:10px;">No vehicles found</h3>
+                        <p>${vehicules.length === 0 ? 'Start by adding your first vehicle!' : 'Try adjusting your search or filter'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            list.forEach(v => {
+                const card = document.createElement('div');
+                card.className = 'vehicle-card';
+                
+                const hasImage = v.img && v.img !== '';
+                
+                const imgContainer = document.createElement('div');
+                imgContainer.className = 'vehicle-image';
+                
+                if (hasImage) {
+                    const img = document.createElement('img');
+                    img.src = v.img;
+                    img.alt = v.titre;
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    imgContainer.appendChild(img);
+                }
+                
+                const content = document.createElement('div');
+                content.className = 'vehicle-content';
+                
+                // Favorite button
+                const favoriteBtn = document.createElement('button');
+                favoriteBtn.className = `favorite-btn ${favorites.includes(v.id) ? 'active' : ''}`;
+                favoriteBtn.innerHTML = '<i class="fas fa-heart"></i>';
+                favoriteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    toggleFavorite(v.id);
+                };
+                card.appendChild(favoriteBtn);
+                
+                // Quick view button
+                const quickViewBtn = document.createElement('button');
+                quickViewBtn.className = 'quick-view-btn';
+                quickViewBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                quickViewBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    showQuickView(v.id);
+                };
+                card.appendChild(quickViewBtn);
+                
+                const category = document.createElement('div');
+                category.className = 'vehicle-category';
+                category.innerText = v.cat;
+                
+                const title = document.createElement('h3');
+                title.className = 'vehicle-title';
+                title.innerText = v.titre;
+                
+                const description = document.createElement('p');
+                description.className = 'vehicle-description';
+                description.innerText = v.desc;
+                
+                const price = document.createElement('div');
+                price.className = 'vehicle-price';
+                price.innerText = `$${v.prix.toLocaleString()}`;
+                
+                content.appendChild(category);
+                content.appendChild(title);
+                content.appendChild(description);
+                content.appendChild(price);
+                
+                if (v.cat === 'EVENT' && v.qty) {
+                    const qty = document.createElement('div');
+                    qty.className = 'vehicle-qty';
+                    qty.innerHTML = `<i class="fas fa-exclamation-circle"></i> Limited quantity: ${v.qty}`;
+                    content.appendChild(qty);
+                }
+                
+                if (mode === 'owner') {
+                    const actions = document.createElement('div');
+                    actions.className = 'vehicle-actions';
+                    
+                    const editBtn = document.createElement('button');
+                    editBtn.className = 'action-btn edit-btn';
+                    editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit';
+                    editBtn.onclick = () => editVehicule(v.id);
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'action-btn delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Delete';
+                    deleteBtn.onclick = () => {
+                        if (confirm(`Are you sure you want to delete "${v.titre}"?`)) {
+                            vehicules = vehicules.filter(x => x.id !== v.id);
+                            // Remove from favorites if it was there
+                            const favIndex = favorites.indexOf(v.id);
+                            if (favIndex !== -1) {
+                                favorites.splice(favIndex, 1);
+                                localStorage.setItem('favorites', JSON.stringify(favorites));
+                            }
+                            localStorage.setItem('vehicules', JSON.stringify(vehicules));
+                            afficherCatalogue();
+                            updateStats();
+                            showMessage('Vehicle deleted successfully!', 'success');
+                        }
+                    };
+                    
+                    actions.appendChild(editBtn);
+                    actions.appendChild(deleteBtn);
+                    content.appendChild(actions);
+                }
+                
+                card.appendChild(imgContainer);
+                card.appendChild(content);
+                listeDiv.appendChild(card);
+            });
+        }
+
+        function exportCatalog() {
+            const dataStr = JSON.stringify(vehicules, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rider-motors-catalog.json';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showMessage('Catalog exported successfully!', 'success');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCategories();
+            updateStats();
+            
+            // Event listeners for buttons
+            saveButton.addEventListener('click', ajouterVehicule);
+            cancelButton.addEventListener('click', cancelEdit);
+        });
+    </script>
+</body>
+</html>
